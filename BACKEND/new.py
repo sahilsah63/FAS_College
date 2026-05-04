@@ -49,10 +49,18 @@ def token_required(f):
 
 
 # ================= DATABASE CONNECTION ==================
+# def get_connection():
+#     # Ensure database name is correct
+#     return mysql.connector.connect(
+#         host="localhost", user="root", password="Sahil12@", database="attendance_new"
+#     )
+
 def get_connection():
-    # Ensure database name is correct
     return mysql.connector.connect(
-        host="localhost", user="root", password="Sahil12@", database="attendance_new"
+        host=os.getenv("DB_HOST"),
+        user=os.getenv("DB_USER"),
+        password=os.getenv("DB_PASSWORD"),
+        database=os.getenv("DB_NAME")
     )
 
 
