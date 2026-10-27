@@ -5,7 +5,7 @@ def fix_database_schema():
     print("🔧 Database fix start kar raha hu...")
 
     try:
-        # Database se connect karein
+       
         conn = mysql.connector.connect(
             host="localhost",
             user="root",
@@ -14,7 +14,7 @@ def fix_database_schema():
         )
         cur = conn.cursor()
 
-        # 1. Students table mein org_id add karein
+     
         try:
             print("👉 Checking 'students' table...")
             cur.execute("ALTER TABLE students ADD COLUMN org_id INT DEFAULT 1")
@@ -25,7 +25,7 @@ def fix_database_schema():
             else:
                 print(f"❌ Error in students table: {e}")
 
-        # 2. Attendance table mein org_id add karein
+        
         try:
             print("👉 Checking 'attendance_new' table...")
             cur.execute("ALTER TABLE attendance_new ADD COLUMN org_id INT DEFAULT 1")
