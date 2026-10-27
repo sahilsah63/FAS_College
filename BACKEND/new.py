@@ -86,7 +86,7 @@ def init_db():
         )
     """)
 
-    # Users Table (YE MISSING THA)
+    # Users Table 
     cur.execute("""
         CREATE TABLE IF NOT EXISTS users (
             user_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -129,9 +129,9 @@ def init_db():
     # 3. Default Admin User Insert (Auto-create if not exists)
     cur.execute("SELECT * FROM users WHERE email = 'sahil@bncet.in'")
     if not cur.fetchone():
-        # Pehle Org ensure karein
+      
         cur.execute("INSERT IGNORE INTO organizations (org_id, org_name) VALUES (1, 'BNCET College')")
-        # Phir User banayein
+       
         cur.execute(
             "INSERT INTO users (org_id, name, email, password, role) VALUES (1, 'Sahil Sir', 'sahil@bncet.in', '12345', 'Admin')")
         print("✅ Default User Created: sahil@bncet.in / 12345")
@@ -164,9 +164,9 @@ def login():
 
 # --- 2. REGISTER (SaaS Fixed) ---
 @app.route('/api/register', methods=['POST'])
-# @token_required  # <--- FIXED: Now requires Login
+
 def register_student():
-    org_id = "1" # Hardcoded for testing since we removed token_required
+    org_id = "1" 
 
     name = request.form.get('name')
     roll = request.form.get('roll_number')
@@ -362,7 +362,7 @@ def generate_pdf():
     if session_id and session_id != 'null':
         cur.execute("SELECT name, status, timestamp FROM attendance_new WHERE session_id = %s", (session_id,))
     else:
-        # Agar session ID nahi hai to aaj ka data nikalo
+        
         cur.execute("SELECT name, status, timestamp FROM attendance_new WHERE DATE(timestamp) = CURDATE()")
 
     rows = cur.fetchall()
@@ -396,11 +396,11 @@ def generate_pdf():
     for i, row in enumerate(rows, start=1):
         name = row[0]
         status = row[1]
-        timestamp = str(row[2])  # Datetime ko string bana rahe hain
+        timestamp = str(row[2])  
         table_data.append([str(i), name, status, timestamp])
 
     # 4. Table Styling (Professional Look)
-    # Column Widths adjust kiye hain taaki page par fit ho
+   
     col_widths = [0.6 * inch, 3.0 * inch, 1.2 * inch, 2.0 * inch]
 
     t = Table(table_data, colWidths=col_widths)
@@ -427,15 +427,15 @@ def generate_pdf():
     ])
 
     # 5. Conditional Coloring (Green for Present, Red for Unknown/Absent)
-    # Row 1 se shuru karenge kyunki Row 0 Header hai
+   
     for i, row in enumerate(table_data[1:], start=1):
         status_text = row[2].lower()
         if "present" in status_text:
             text_color = colors.green
         else:
-            text_color = colors.red  # Unknown ya Absent ke liye Red
+            text_color = colors.red  # for Unknown and Absent -- Red
 
-        # Sirf 'Status' column (Index 2) ka color badalna hai
+        # Sirf 'Status' column (Index 2) changes color
         style.add('TEXTCOLOR', (2, i), (2, i), text_color)
 
     t.setStyle(style)
